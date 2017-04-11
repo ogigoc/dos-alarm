@@ -4,7 +4,7 @@
 	mov es, ax
 	mov si, 400
 
-	mov ax, 5123
+	mov ax, 324
 	mov bl, 10
 	mov di, 0
 
