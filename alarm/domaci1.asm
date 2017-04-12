@@ -30,27 +30,30 @@ main:
 	repne scasb
 	mov ax, di
 	call _parse_time
+	mov eax, [alarm_time]
 	cmp eax, 0
 	je .invalid_time
 
-	mov cx, 0
-	call _print_date
-	cmp cx, 0
-	je .invalid_date
+	;mov si, alarm_time
+	;call _print
 
-	call _update_time
+	; call _update_time
 
 	jmp .start
 	ret
 
 .stop:
-	; TODO STOP
+	
+	call _stop_tsr
+	
 	mov si, stop_msg
 	call _print
 	ret
 
 .start:
-	; TODO START
+	
+	call _start_tsr
+
 	mov si, start_msg
 	call _print
 	ret
@@ -65,15 +68,16 @@ main:
 	call _print
 	ret
 
-.invalid_date:
-	mov si, invalid_date_msg
-	call _print
-	ret
+; .invalid_date:
+; 	mov si, invalid_date_msg
+; 	call _print
+; 	ret
 
 %include "psp.asm"
 %include "print.asm"
 %include "screen.asm"
 %include "time.asm"
+%include "tsr.asm"
 
 segment .data
 
@@ -81,4 +85,8 @@ stop_msg: db 'Stop successful.', 0
 start_msg: db 'Start successful.', 0
 invalid_command_msg: db 'Invalid command.', 0
 invalid_time_msg: db 'Invalid time.', 0
-invalid_date_msg: db 'Invalid date.', 0
+; invalid_date_msg: db 'Invalid date.', 0
+
+alarm_time: dd 0
+alarm_msg: db 'ALARM!', 0
+is_alarm: db 0

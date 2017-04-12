@@ -76,14 +76,13 @@ _parse_time:
 	add eax, ecx
 
 
-	mov dword [.tmp], eax
+	
 .good:
+	mov [alarm_time], eax
 	popa
-	mov eax, dword [.tmp]
 	ret
 .bad_format:
 	popa
-	mov eax, 0
 	ret
 
 	.tmp dw 0
