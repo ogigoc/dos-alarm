@@ -1,4 +1,3 @@
-
 segment .code
 
 _parse_start:
@@ -19,6 +18,8 @@ _parse_start:
 	mov ax, 0
 	ret
 
+
+
 _parse_stop:
 	pusha
 	cld
@@ -36,6 +37,8 @@ _parse_stop:
 	popa
 	mov ax, 0
 	ret
+
+
 
 _parse_time:
 	pusha
@@ -74,8 +77,6 @@ _parse_time:
 	cmp cx, 59
 	jg .bad_format
 	add eax, ecx
-
-
 	
 .good:
 	mov [alarm_time], eax

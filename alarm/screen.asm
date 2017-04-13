@@ -3,7 +3,6 @@ _print_date:
 	pushad
 
 	call _clear
-	;mov eax, [alarm_time]
 
 	mov si, 473
 	add si, cx
@@ -35,34 +34,70 @@ _print_date:
 	popad
 	ret
 
+
+
 _print_alarm:
 	pusha
 	call _clear
+	call _clear_down
 
 	mov ax, 0B800h
 	mov es, ax
 	
-	mov bx, 450
-	
-	mov si, alarm_msg
-	
-.petlja:
-	mov al, byte [si]
-	cmp al, 0
-	je .kraj
-	
-	mov [es:bx], al
+	mov bx, 780
+
+	mov [es:bx], byte 'A'
+	inc bx
+	mov [es:bx], byte 02h
+	inc bx	
+	mov [es:bx], byte 'L'
+	inc bx
+	mov [es:bx], byte 02h
+	inc bx	
+	mov [es:bx], byte 'A'
+	inc bx
+	mov [es:bx], byte 02h
+	inc bx	
+	mov [es:bx], byte 'R'
+	inc bx
+	mov [es:bx], byte 02h
+	inc bx	
+	mov [es:bx], byte 'M'
+	inc bx
+	mov [es:bx], byte 02h
+	inc bx	
+	mov [es:bx], byte '!'
 	inc bx
 	mov [es:bx], byte 02h
 	inc bx
-
-	inc si
-	
-	jmp .petlja
 	
 .kraj:
 	popa
 	ret
+
+
+
+_clear_alarm:
+	pusha
+
+	mov ax, 0B800h
+	mov es, ax
+	
+	mov bx, 780
+
+	mov cx, 8
+.clrurj:
+	mov [es:bx], byte ' '
+	inc bx
+	mov [es:bx], byte 02h
+	inc bx
+	loop .clrurj
+	
+.kraj:
+	popa
+	ret
+
+
 
 _clear:
 	pusha
@@ -90,6 +125,36 @@ _clear:
 	loop .petlja
 	ret
 
+
+
+_clear_down:
+	pusha
+	mov ax, 0B800h
+	mov es, ax
+	
+	mov bx, 458
+	mov cx, 10
+	call .petlja	
+	mov bx, 618
+	mov cx, 10
+	call .petlja
+
+	popa
+	ret
+	
+.petlja:
+	mov al, ' '
+	
+	mov [es:bx], al
+	inc bx
+	mov [es:bx], byte 02h
+	inc bx
+	
+	loop .petlja
+	ret
+
+
+
 _print_tuple:
 	mov [es:si], byte 2h
 	dec si
@@ -103,6 +168,8 @@ _print_tuple:
 
 	ret
 
+
+
 _print_dots:
 	mov [es:si], byte 2h
 	dec si
@@ -112,4 +179,3 @@ _print_dots:
 %include "int2str.asm"
 
 segment .data
-

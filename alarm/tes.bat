@@ -1,0 +1,1 @@
+domaci1 -start 02:30:00

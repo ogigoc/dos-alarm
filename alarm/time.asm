@@ -2,7 +2,11 @@ _update_time:
 	pusha
 	pushad
 
-	mov ebx, [cs:alarm_time]
+	mov es, [cs:flag_seg]
+	mov bx, [cs:flag_off]
+	cmp [es:bx], byte 0
+	jne .done
+
 	call _get_time
 	cmp eax, 0
 	je .done
@@ -29,8 +33,8 @@ _update_time:
 	jl .alarm_time
 
 	mov [cs:is_alarm], byte 2
+	call _clear_alarm
 	jmp .done
-	;call _end_alarm
 
 .alarm_time:
 	mov [cs:is_alarm], byte 1
@@ -42,19 +46,16 @@ _update_time:
 	popad
 	iret
 
+
+
 _get_time:
 	mov ah, 2Ch
 
-	;check if should
 	int 21h
 
 	mov [.tmp2], dh
-	;mov bh, dh
-
 	mov eax, 0
 	mov [.tmp], dword eax
-
-	
 	mov eax, 0
 	mov [.tmp], ch
 	mov eax, dword [.tmp]
@@ -64,11 +65,7 @@ _get_time:
 	add eax, dword [.tmp]
 	mov [.tmp], dword 60
 	mul dword [.tmp]
-	;mov [.tmp], bh
 	add eax, dword [.tmp2]
-
-	mov [.tmp], eax
-	mov eax, [.tmp]
 	ret
 
 	.tmp: dd 0
