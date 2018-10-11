@@ -1,2 +1,3 @@
-# dos
-Programs written in NASM for DOSBOX, for a school project.
+# Dos Alarm
+
+Simple alarm program written in assembly (NASM) for DOSBOX.
